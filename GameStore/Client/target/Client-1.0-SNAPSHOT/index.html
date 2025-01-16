@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valorant 夜市</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-image: url('static/屏幕截图 2025-01-01 214556.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        header {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .sub-title {
+            font-size: 1.2em;
+            margin: 15px 0;
+            color: #ddd;
+        }
+        .market {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            width: 100%;
+            padding: 20px 0;
+            flex-wrap: wrap;
+        }
+        .card-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .card {
+            background-color: rgba(43, 43, 61, 0.8);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s, background-image 0.5s ease;
+            width: 150px;
+            height: 250px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+        }
+        .card h3 {
+            font-size: 16px;
+            margin: 0;
+            position: absolute;
+            top: 10px;
+        }
+        .card p {
+            font-size: 14px;
+            color: #aaa;
+            margin: 0;
+            position: absolute;
+            bottom: 40px; /* 将价格文本的位置稍微向上调整 */
+        }
+        .card::before {
+            content: "加载中...";
+            font-size: 12px;
+            color: #999;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+        .button-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            text-align: right;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        .button {
+            background-color: rgba(255, 255, 255, 0.7);
+            color: #333;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .button:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #444;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        /* 购物车按钮样式 */
+        .cart-button {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.7);
+            color: #333;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .cart-button:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #444;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        /* 购物车弹窗样式 */
+        .cart-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+        }
+        .cart-item {
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .cart-item button {
+            background-color: rgba(255, 0, 0, 0.8);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .cart-item button:hover {
+            background-color: rgba(255, 0, 0, 1);
+        }
+        .add-to-cart {
+            background-color: #6c757d;
+            color: white;
+            border: 2px solid #6c757d;
+            padding: 8px 16px;
+            font-size: 14px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .add-to-cart:hover {
+            background-color: #5a636e;
+            border-color: #5a636e;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+    </style>
+</head>
+<body>
+<header>
+    <h1>Valorant 夜市</h1>
+    <p>限时折扣，抓住机会获取你的皮肤！</p>
+</header>
+<h2 class="sub-title">折扣枪皮展示</h2>
+<div class="market">
+    <div class="card-wrapper">
+        <div class="card" data-id="1" style="background-image: url('########');">
+            <h3>皮肤名称 1</h3>
+            <p>折扣价：800 VP</p>
+        </div>
+        <button class="add-to-cart">加入购物车</button>
+    </div>
+    <div class="card-wrapper">
+        <div class="card" data-id="2" style="background-image: url('###########');">
+            <h3>皮肤名称 2</h3>
+            <p>折扣价：1200 VP</p>
+        </div>
+        <button class="add-to-cart">加入购物车</button>
+    </div>
+    <div class="card-wrapper">
+        <div class="card" data-id="3" style="background-image: url('#########');">
+            <h3>皮肤名称 3</h3>
+            <p>折扣价：1000 VP</p>
+        </div>
+        <button class="add-to-cart">加入购物车</button>
+    </div>
+    <div class="card-wrapper">
+        <div class="card" data-id="4" style="background-image: url('########');">
+            <h3>皮肤名称 4</h3>
+            <p>折扣价：900 VP</p>
+        </div>
+        <button class="add-to-cart">加入购物车</button>
+    </div>
+    <div class="card-wrapper">
+        <div class="card" data-id="5" style="background-image: url('##########');">
+            <h3>皮肤名称 5</h3>
+            <p>折扣价：700 VP</p>
+        </div>
+        <button class="add-to-cart">加入购物车</button>
+    </div>
+    <div class="card-wrapper">
+        <div class="card" data-id="6" style="background-image: url('##########');">
+            <h3>皮肤名称 6</h3>
+            <p>折扣价：1100 VP</p>
+        </div>
+        <button class="add-to-cart">加入购物车</button>
+    </div>
+</div>
+<h2 class="sub-title">活动规则与说明</h2>
+<p style="width: 80%; text-align: center; line-height: 1.6;">
+    夜市提供随机的六款折扣枪皮，每次刷新内容独立。所有折扣枪皮均以优惠价出售，仅限活动期间购买。折扣内容不可更换，活动结束后将不再提供当前折扣。
+</p>
+<div class="button-container">
+    <button class="button"><a href="regist.html" target="_blank">注册</a></button>
+    <button class="button"><a href="login.html" target="_blank">登录</a></button>
+</div>
+
+<!-- 购物车弹窗 -->
+<div id="cartPopup" class="cart-popup">
+    <h3>购物车</h3>
+    <div id="cartItems"></div>
+    <button id="checkoutButton" class="button">结算</button>
+    <button id="closeCartButton" class="button">关闭</button>
+</div>
+
+<button id="openCartButton" class="cart-button">查看购物车</button>
+
+<script>
+    let cart = [];
+
+    // 显示购物车弹窗
+    document.getElementById('openCartButton').addEventListener('click', function() {
+        const cartPopup = document.getElementById('cartPopup');
+        cartPopup.style.display = 'block';
+        updateCart();
+    });
+
+    // 关闭购物车弹窗
+    document.getElementById('closeCartButton').addEventListener('click', function() {
+        const cartPopup = document.getElementById('cartPopup');
+        cartPopup.style.display = 'none';
+    });
+
+    // 添加商品到购物车
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+        button.addEventListener('click', function() {
+            const card = this.closest('.card-wrapper').querySelector('.card');
+            const Name = card.querySelector('h3').textContent;
+            const Price = card.querySelector('p').textContent;
+            const ProductID = card.getAttribute('data-id');
+            const ImagePath = card.style.backgroundImage;
+            const color= '白';
+
+            cart.push({ Name, Price, ProductID, ImagePath ,color});
+            alert(`${Name} 已加入购物车`);
+        });
+    });
+
+    // 更新购物车UI
+    function updateCart() {
+        const cartItemsContainer = document.getElementById('cartItems');
+        cartItemsContainer.innerHTML = ''; // 清空当前购物车内容
+
+        cart.forEach((item, index) => {
+            const cartItem = document.createElement('div');
+            cartItem.classList.add('cart-item');
+            cartItem.innerHTML = `
+                <span>${item.Name} - ${item.Price}</span>
+                <button onclick="removeFromCart(${index})">删除</button>
+            `;
+            cartItemsContainer.appendChild(cartItem);
+        });
+    }
+
+    // 删除购物车中的商品
+    function removeFromCart(index) {
+        cart.splice(index, 1); // 从购物车中移除商品
+        updateCart();
+    }
+
+    // 提交订单
+    document.getElementById('checkoutButton').addEventListener('click', function() {
+        const xhr = new XMLHttpRequest();
+        const url = 'SkinController/addToCart'; // 后端接口，替换为实际接口
+
+
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    alert('购买成功');
+                    cart = []; // 清空购物车
+                    updateCart(); // 更新购物车UI
+                } else {
+                    alert('购买失败，请稍后重试');
+                }
+            }
+        };
+
+        xhr.send(JSON.stringify({ cart }));
+    });
+
+    // 保留申请枪皮功能
+    document.querySelectorAll('.card').forEach(card => {
+        let isLoading = false;
+
+        card.addEventListener('click', function () {
+            if (isLoading) return;
+            isLoading = true;
+            const skinId = this.getAttribute('data-id');
+            const currentCard = this;
+
+            currentCard.classList.add('loading');
+
+            const xhr = new XMLHttpRequest();
+            const url = `SkinController/extractSkin?id=${skinId}`;
+
+            xhr.open('GET', url, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    isLoading = false;
+                    currentCard.classList.remove('loading');
+
+                    if (xhr.status === 200) {
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+                            if (response.success) {
+                                const productId = response.ProductId;
+                                if (productId !== undefined) {
+                                    document.querySelector('.card').setAttribute('data-id', productId);
+                                } else {
+                                    console.error("ProductId is undefined");
+                                }
+                                currentCard.querySelector('h3').textContent = response.skinName;
+                                currentCard.querySelector('p').textContent = `折扣价：${response.price}`;
+                                currentCard.style.backgroundImage = `url('${response.imageUrl}')`;
+                                alert('枪皮申请成功！');
+                            } else {
+                                alert(`申请失败：${response.message}`);
+                            }
+                        } catch (e) {
+                            alert('返回数据解析失败！');
+                        }
+                    } else {
+                        alert('请求失败，请稍后重试！');
+                    }
+                }
+            };
+
+            xhr.send();
+        });
+    });
+</script>
+</body>
+</html>

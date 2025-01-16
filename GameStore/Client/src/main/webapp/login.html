@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录页面</title>
+    <!-- 引入更具科技感的字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #2d2d2d;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('static/屏幕截图 2025-01-01 225657.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        h1, h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: #00ffff;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 15px rgba(0, 255, 255, 0.6), 0 0 25px rgba(0, 255, 255, 0.6);
+            font-weight: 700;
+            font-size: 40px;
+        }
+
+        h3 {
+            font-size: 24px;
+            color: #ccc;
+            font-weight: 500;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 15px rgba(0, 255, 255, 0.6);
+        }
+
+        .tab {
+            width: 500px;
+            padding: 30px;
+            background-color: rgba(43, 43, 61, 0.8);
+            border-radius: 12px; /* 增加圆角 */
+            box-sizing: border-box;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4); /* 阴影效果，简约且高级 */
+        }
+
+        .ltr td {
+            padding: 10px;
+            border: none; /* 去掉单元格边框 */
+        }
+
+        .ipt {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px; /* 更圆滑的边框 */
+            border: 1px solid #777; /* 更柔和的边框颜色 */
+            background-color: #333;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 500;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .ipt:focus {
+            border-color: cadetblue;
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.6); /* 在聚焦时增加柔和的光晕效果 */
+        }
+
+        .btn1 {
+            background-color: antiquewhite;
+            border: 2px solid powderblue;
+            border-radius: 8px; /* 更圆滑的按钮边角 */
+            padding: 12px 25px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .btn1:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #444;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .msg {
+            color: rgb(253, 153, 127);
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .buttonContainer {
+            text-align: center;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        a:hover {
+            color: cadetblue;
+        }
+
+        /* 修正输入框和提示信息的显示问题 */
+        .ltr td span {
+            white-space: nowrap;
+        }
+    </style>
+    <script>
+        function checkUsername() {
+            var usernameReg = /^[a-zA-Z0-9]{5,10}$/;
+            var usernameInput = document.getElementById("usernameInput");
+            var username = usernameInput.value;
+            var usernameMsg = document.getElementById("usernameMsg");
+            if (!usernameReg.test(username)) {
+                usernameMsg.innerText = "用户名格式有误";
+                return false;
+            }
+            usernameMsg.innerText = "OK";
+            return true;
+        }
+
+        function checkUserPwd() {
+            var userPwdReg = /^[0-9]{6}$/;
+            var userPwdInput = document.getElementById("userPwdInput");
+            var userPwd = userPwdInput.value;
+            var userPwdMsg = document.getElementById("userPwdMsg");
+            if (!userPwdReg.test(userPwd)) {
+                userPwdMsg.innerText = "密码必须是6位数字";
+                return false;
+            }
+            userPwdMsg.innerText = "OK";
+            return true;
+        }
+
+        function checkForm() {
+            var flag1 = checkUsername();
+            var flag2 = checkUserPwd();
+
+            return flag1 && flag2;
+        }
+    </script>
+</head>
+<body>
+<h1>欢迎使用游戏道具商城</h1>
+<h3>请登录</h3>
+<form method="post" action="/user/login" onsubmit="return checkForm()">
+    <table class="tab" cellspacing="0px">
+        <tr class="ltr">
+            <td>请输入账号</td>
+            <td>
+                <input class="ipt" type="text" id="usernameInput" name="username" onblur="checkUsername()">
+                <span id="usernameMsg" class="msg"></span>
+            </td>
+        </tr>
+        <tr class="ltr">
+            <td>请输入密码</td>
+            <td>
+                <input class="ipt" type="password" id="userPwdInput" name="userPwd" onblur="checkUserPwd()">
+                <span id="userPwdMsg" class="msg"></span>
+            </td>
+        </tr>
+        <tr class="ltr">
+            <td colspan="2" class="buttonContainer">
+                <input class="btn1" type="submit" value="登录">
+                <input class="btn1" type="reset" value="重置">
+                <a href="regist.html"><button class="btn1" type="button">去注册</button></a>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
